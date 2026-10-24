@@ -10,10 +10,10 @@ import os
 import sys
 import time
 from datetime import date
-from urllib.error import HTTPError
-from urllib.request import Request, urlopen
 from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
+
+import requests
 
 RAW = "data/raw"
 MANIFEST = "data/manifest.csv"
@@ -81,33 +81,26 @@ def main(list_file):
                 print("BLOCKED by robots.txt, not downloading:", url)
                 continue
 
-            request = Request(url, headers=HEADERS)
-            try:
-                with urlopen(request, timeout=30) as response:
-                    status = response.status
-                    content = response.read()
-            except HTTPError as error:
-                status = error.code
-                content = b""
+            r = requests.get(url, headers=HEADERS, timeout=30)
 
-            if status != 200:
-                print("failed", status, url)
+            if r.status_code != 200:
+                print("failed", r.status_code, url)
                 continue
 
             with open(path, "wb") as f:
-                f.write(content)
+                f.write(r.content)
 
-            digest = hashlib.sha256(content).hexdigest()[:16]
+            digest = hashlib.sha256(r.content).hexdigest()[:16]
 
             log.writerow([
                 path,
                 url,
                 date.today().isoformat(),
-                len(content),
+                len(r.content),
                 digest
             ])
 
-            print("saved", path, len(content), "bytes")
+            print("saved", path, len(r.content), "bytes")
 
             time.sleep(DELAY)
 
