@@ -1,0 +1,39 @@
+================================================================================
+Sample Dataset Excerpt: Computer Networks (CS8591)
+Course: NPTEL - Computer Networks (IIT Kharagpur)
+Source URL: https://nptel.ac.in/courses/106105081
+================================================================================
+
+--- Page 4 (From Lecture 01: Detailed Comparison - TCP vs UDP) ---
+[Timestamp: 16:16 - 22:00]
+Lecture Topic: Detailed Comparison - TCP vs UDP
+
+Students frequently ask how to decide between TCP and UDP for network software engineering.
+Let us contrast the two protocols across essential dimensions:
+1. Connection Paradigm:
+   - TCP is connection-oriented: Requires 3-way handshake setup and 4-way teardown.
+   - UDP is connectionless: Sends datagrams immediately without setup.
+2. Reliability and Ordering:
+   - TCP guarantees reliable in-order delivery: Lost packets are retransmitted, duplicates discarded, and out-of-order packets reassembled.
+   - UDP offers best-effort delivery: No retransmissions, no packet ordering guarantee.
+3. Flow and Congestion Control:
+   - TCP includes sophisticated sliding window flow control and network congestion control (Slow Start, Congestion Avoidance).
+   - UDP has neither flow control nor congestion control.
+4. Header Overhead:
+   - TCP header is 20 bytes minimum (up to 60 bytes with options).
+   - UDP header is fixed at 8 bytes.
+5. Typical Applications:
+   - TCP is essential for Web (HTTP/HTTPS), File Transfer (FTP), Email (SMTP/IMAP), and Remote Login (SSH), where zero data loss is critical.
+   - UDP is chosen for Real-time Audio/Video Streaming, VoIP, DNS queries, Online Gaming, and IoT sensors, where low latency is prized over retransmission delays.
+
+--- Page 6 (From Lecture 01: Why TCP is Called a Reliable Protocol) ---
+[Timestamp: 27:31 - 33:15]
+Lecture Topic: Why TCP is Called a Reliable Protocol (Reliability Mechanisms)
+
+Why is TCP formally classified as a reliable transport protocol while running over an inherently unreliable IP network?
+TCP guarantees that the stream of data received by the destination application is identical to the stream sent by the source, in the exact sequence and without corruption. It achieves this reliability through five core mechanisms:
+1. Checksums: Every TCP segment includes a 16-bit internet checksum calculated over the TCP header, payload, and an IP pseudo-header. If bits are corrupted in transit, the receiver detects checksum mismatch and silently discards the segment.
+2. Sequence Numbers: Every transmitted byte of data is assigned a sequential 32-bit sequence number. This allows the receiver to detect duplicate packets, drop redundant data, and reconstruct the correct byte order despite network reordering.
+3. Cumulative Acknowledgments (ACKs): The receiver informs the sender of successfully received data by sending ACKs carrying the acknowledgment number, which represents the next byte the receiver expects to see.
+4. Retransmission Timers (RTO): For every transmitted segment, TCP starts a Retransmission Time-Out (RTO) timer. If an ACK is not received before the timer expires, TCP assumes the segment was lost and retransmits it.
+5. Fast Retransmit: If the sender receives three duplicate ACKs for the same sequence number, it deduces packet loss before timer expiration and immediately retransmits the missing segment.

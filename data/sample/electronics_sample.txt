@@ -1,0 +1,42 @@
+================================================================================
+Sample Dataset Excerpt: Digital Electronic Circuits (EC8392)
+Course: NPTEL - Digital Electronic Circuits (IIT Kharagpur)
+Source URL: https://nptel.ac.in/courses/108105132
+================================================================================
+
+--- Page 2 (From Lecture 01: BJT Operating Regions) ---
+[Timestamp: 05:16 - 10:30]
+Lecture Topic: The Bipolar Junction Transistor (BJT) as an Electronic Switch
+
+The Bipolar Junction Transistor (BJT) is a three-terminal semiconductor device consisting of three doped regions: the Emitter (E), Base (B), and Collector (C). It comes in two polarities: NPN and PNP. In digital logic, NPN transistors configured in the Common Emitter (CE) configuration are widely used.
+Operating Regions of an NPN Transistor:
+An NPN transistor has two p-n junctions: the Base-Emitter (BE) junction and the Base-Collector (BC) junction. Depending on their biasing, the transistor operates in one of three regions:
+1. Cut-Off Region (Switch OFF / Open State):
+   - Both BE and BC junctions are reverse biased (or V_BE < 0.7V for silicon).
+   - Base current I_B = 0.
+   - Collector current I_C = 0 (negligible reverse leakage current I_CEO).
+   - The transistor acts as an open circuit between the collector and emitter terminals.
+2. Saturation Region (Switch ON / Closed State):
+   - Both BE and BC junctions are forward biased (V_BE >= 0.7V and V_CE is very small).
+   - Base current I_B is large, driving the transistor into deep saturation: I_B >= I_C(sat) / beta.
+   - Collector-Emitter voltage drops to a small saturation voltage: V_CE(sat) approx 0.2V.
+   - The transistor acts as a closed circuit (short circuit) between collector and emitter terminals.
+3. Active Region:
+   - BE junction forward biased, BC junction reverse biased. Here I_C = beta * I_B. This linear region is utilized for analog amplification, but is avoided in digital switching because it dissipates power during steady-state.
+
+--- Page 3 (From Lecture 01: Transistor Switching Circuit Analysis) ---
+[Timestamp: 10:31 - 16:00]
+Lecture Topic: Detailed Circuit Analysis - Transistor Switching Operation
+
+Case 1: Input Voltage V_in = 0V (Logic LOW)
+- Because V_in < 0.7V, the Base-Emitter junction cannot turn on.
+- Base current I_B = 0, so Collector current I_C = 0.
+- V_out = V_CC - (0 * R_C) = V_CC.
+- When input is Logic 0 (LOW), output is Logic 1 (HIGH = V_CC). Switch is OPEN (OFF).
+
+Case 2: Input Voltage V_in = 5V (Logic HIGH)
+- Base current flows: I_B = (5.0V - 0.7V) / R_B.
+- Transistor enters SATURATION region.
+- Maximum collector current flows, and output voltage drops to V_out = V_CE(sat) approx 0.2V (Logic LOW).
+- When input is Logic 1 (HIGH), output is Logic 0 (LOW). Switch is CLOSED (ON).
+This transistor switch forms the electronic implementation of a NOT gate (Inverter).
