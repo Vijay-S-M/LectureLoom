@@ -44,6 +44,10 @@ The evaluation questions include Tamil, Tanglish, and English queries representi
 9. **2NF மற்றும் 3NF இடையே என்ன வித்தியாசம்?** — *DBMS, pages 4–6 (Needs multi-page)*
 10. **Who won the FIFA World Cup 2022?** — *(Cannot be answered from my documents; out-of-domain control)*
 
+## System Design & Architecture
+
+See [DESIGN.md](DESIGN.md) for full API endpoint specifications (`/health`, `/chat`, `/usage`), database tables (PostgreSQL/pgvector and SQLite usage logs), retry and model fallback state machines, and token cost formulas.
+
 ## Run it
 
 ### Windows
@@ -64,6 +68,12 @@ source .venv/bin/activate
 pip install -r requirements-dev.txt
 cp .env.example .env
 uvicorn app.main:app --reload
+```
+
+### Run with Docker Compose (API + PostgreSQL / pgvector)
+
+```bash
+docker compose up --build
 ```
 
 ### Health Check
@@ -88,6 +98,32 @@ Expected response:
     "app": "examate-rag",
     "environment": "local"
 }
+```
+
+### Chat Endpoint (`POST /chat`)
+
+Ask a technical question (returns structured JSON with token count and cost):
+
+```bash
+curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "டிரான்சிஸ்டர் எப்படி ஸ்விட்சாக வேலை செய்கிறது?", "stream": false}'
+```
+
+Stream response via Server-Sent Events (SSE):
+
+```bash
+curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What is the difference between TCP and UDP?", "stream": true}'
+```
+
+### Usage & Cost Endpoint (`GET /usage`)
+
+Retrieve token usage and cost metrics:
+
+```bash
+curl http://localhost:8000/usage
 ```
 
 ### API Documentation
@@ -125,10 +161,10 @@ English NPTEL Transcript Chunks
 Relevant Context
    │
    ↓
-LLM Answer Generation
+LLM Answer Generation (Primary Model -> Fallback Model)
    │
    ↓
-Fact Checking
+Fact Checking & Usage Logger (Tokens + Cost)
    │
    ↓
 Tamil Answer
@@ -148,4 +184,9 @@ The target is:
 
 ## Live link
 
-Added in Week 2.
+- **Live Service Health**: [https://lectureloom-api.onrender.com/health](https://lectureloom-api.onrender.com/health) (Free cloud hosting on Render)
+- **Interactive Swagger Docs**: [https://lectureloom-api.onrender.com/docs](https://lectureloom-api.onrender.com/docs)
+- **Live Health Probe**:
+  ```bash
+  curl https://lectureloom-api.onrender.com/health
+  ```
